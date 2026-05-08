@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeScore – Học tập cân bằng, tâm trí khoẻ mạnh</title>
+  <meta name="description" content="SafeScore giúp sinh viên theo dõi cảm xúc học tập, quản lý deadline và nhận cảnh báo khi quá tải, hướng đến cân bằng tinh thần bền vững." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/animations.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ AUTH SHELL ══════════════════════════════════════ -->
+<div id="auth-shell" class="hidden">
+  <div class="auth-bg">
+    <div class="auth-orb auth-orb--1"></div>
+    <div class="auth-orb auth-orb--2"></div>
+    <div class="auth-orb auth-orb--3"></div>
+  </div>
+  <div class="auth-card glass-card">
+    <div class="auth-logo">
+      <span class="logo-icon">🎯</span>
+      <span class="logo-text">SafeScore</span>
+    </div>
+    <p class="auth-tagline">Học tập cân bằng · Tâm trí khoẻ mạnh</p>
+
+    <!-- Login Form -->
+    <div id="login-form-wrap">
+      <h1 class="auth-title">Chào mừng trở lại</h1>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="sinh.vien@email.com" autocomplete="email" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Mật khẩu</label>
+          <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <div id="login-error" class="form-error hidden"></div>
+        <button id="login-btn" type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+      </form>
+      <p class="auth-switch">Chưa có tài khoản? <a id="go-register" href="#">Đăng ký ngay</a></p>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form-wrap" class="hidden">
+      <h1 class="auth-title">Tạo tài khoản mới</h1>
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="reg-name">Họ và tên</label>
+          <input id="reg-name" type="text" placeholder="Nguyễn Văn A" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input id="reg-email" type="email" placeholder="sinh.vien@email.com" autocomplete="email" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Mật khẩu</label>
+          <input id="reg-password" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password" required />
+        </div>
+        <div id="reg-error" class="form-error hidden"></div>
+        <button id="register-btn" type="submit" class="btn btn-primary btn-block">Tạo tài khoản</button>
+      </form>
+      <p class="auth-switch">Đã có tài khoản? <a id="go-login" href="#">Đăng nhập</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ APP SHELL ════════════════════════════════════════ -->
+<div id="app-shell" class="hidden">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">🎯</span>
+      <span class="logo-text">SafeScore</span>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Điều hướng chính">
+      <a href="#dashboard"  class="nav-item" id="nav-dashboard"  data-page="dashboard">
+        <span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#mood"       class="nav-item" id="nav-mood"       data-page="mood">
+        <span class="nav-icon">😊</span><span class="nav-label">Mood Check-in</span>
+      </a>
+      <a href="#deadlines"  class="nav-item" id="nav-deadlines"  data-page="deadlines">
+        <span class="nav-icon">📅</span><span class="nav-label">Deadlines</span>
+      </a>
+      <a href="#stress"     class="nav-item" id="nav-stress"     data-page="stress">
+        <span class="nav-icon">📊</span><span class="nav-label">Stress Meter</span>
+      </a>
+      <a href="#ai"         class="nav-item" id="nav-ai"         data-page="ai">
+        <span class="nav-icon">🤖</span><span class="nav-label">AI Gợi ý</span>
+      </a>
+      <a href="#community"  class="nav-item" id="nav-community"  data-page="community">
+        <span class="nav-icon">💬</span><span class="nav-label">Cộng đồng</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pill" id="user-pill">
+        <span class="user-avatar" id="user-avatar">?</span>
+        <span class="user-name"  id="user-name-sidebar">...</span>
+      </div>
+      <button id="logout-btn" class="btn-logout" title="Đăng xuất">⏻</button>
+    </div>
+  </aside>
+
+  <!-- Mobile top bar -->
+  <header id="mobile-header">
+    <button id="menu-toggle" aria-label="Mở menu">☰</button>
+    <span class="mobile-logo">🎯 SafeScore</span>
+    <div class="mobile-avatar" id="mobile-avatar">?</div>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" role="main" aria-live="polite">
+    <!-- Pages rendered here by JS -->
+  </main>
+
+  <!-- Mobile nav bar -->
+  <nav id="mobile-nav" aria-label="Điều hướng mobile">
+    <a href="#dashboard" class="mob-nav-item" data-page="dashboard"><span>🏠</span><span>Home</span></a>
+    <a href="#mood"      class="mob-nav-item" data-page="mood">     <span>😊</span><span>Mood</span></a>
+    <a href="#deadlines" class="mob-nav-item" data-page="deadlines"><span>📅</span><span>Tasks</span></a>
+    <a href="#stress"    class="mob-nav-item" data-page="stress">   <span>📊</span><span>Stress</span></a>
+    <a href="#community" class="mob-nav-item" data-page="community"><span>💬</span><span>Wall</span></a>
+  </nav>
+
+</div>
+
+<!-- Toast notifications -->
+<div id="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+<!-- Loading spinner -->
+<div id="global-loader" class="hidden">
+  <div class="loader-spinner"></div>
+</div>
+
+<!-- Scripts -->
+<script src="/js/api.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/pages/auth.js"></script>
+<script src="/js/pages/dashboard.js"></script>
+<script src="/js/pages/mood.js"></script>
+<script src="/js/pages/deadlines.js"></script>
+<script src="/js/pages/stress.js"></script>
+<script src="/js/pages/ai.js"></script>
+<script src="/js/pages/community.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
