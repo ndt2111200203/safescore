@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json());
 
 // Serve static frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 // API Routes
 app.use('/api/auth',      require('./routes/auth'));
@@ -26,7 +26,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date() }
 
 // Catch-all: serve SPA
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/index.html'));
 });
 
 const pool = require('./db/pool');
