@@ -29,8 +29,19 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
+const pool = require('./db/pool');
+const fs = require('fs');
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  try {
+    const schema = fs.readFileSync(path.join(__dirname, 'db', 'schema.sql'), 'utf8');
+    await pool.query(schema);
+    console.log('✅ Đã khởi tạo Database Schema tự động thành công!');
+  } catch (err) {
+    console.error('❌ Lỗi tạo bảng DB:', err);
+  }
+
   console.log(`\n🎯 SafeScore đang chạy tại http://localhost:${PORT}`);
   console.log(`📦 Môi trường: ${process.env.NODE_ENV || 'development'}\n`);
 });
